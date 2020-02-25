@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<body>
+    <form>
+        姓名<input id="name" type="text" name="username" />
+        <br />
+        年龄<input id="age" type="text" name="age" />
+        <br />
+        性别：<input type="radio" name="sex" value="男" checked="checked" />男
+        <input type="radio" name="sex" value="女" />女
+        <br />
+        <input id="btn" type="button" value="添加到表格"  />
+    </form>
+    <table cellspacing="0" border="1" width="100%">
+        <tr>
+            <th>序号</th>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>性别</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <th class="num">1</th>
+            <th>王信强</th>
+            <th>18</th>
+            <th>男</th>
+            <th><a href="javascript:void(0);" class="deltr">删除</a></th>
+        </tr>
+    </table>
+</body>
+
+
+<script type = "text/javascript" src = "js/jquery-1.10.1.js" ></script>
+<script>
+    $(function () {
+        var num = $('.num').html();
+
+        //点击添加事件
+       $('#btn').click(function () {
+           //拿输入框里的数据
+           var name = $('#name').val();
+           var age = $('#age').val();
+           var sex = $(':input:checked').val();
+
+           //判断姓名年龄不能为空
+           if (name != '' && age != ''){
+               //判断年龄范围
+               if (age < 0 || age > 200){
+                   alert('年龄必须大于0，且小于等于200的正整数')
+               }else {
+                   num++;
+                   $('<tr></tr>')
+                       .append('<th>' + num +'</th>')
+                       .append('<th>' + name + '</th>')
+                       .append('<th>' + age + '</th>')
+                       .append('<th>' + sex + '</th>')
+                       .append('<th><a href="javascript:void(0);" class="deltr">删除</a></th>')
+                       .appendTo('table tbody').find('a').click(clickA)
+               }
+           } else {
+               alert('姓名、年龄和性别不能为空')
+           }
+
+           //清空输入框
+           $('#name').val('');
+           $('#age').val('');
+
+       })
+
+
+        //删除 点击事件
+        $('a').click(clickA);
+
+        //点击删除事件函数
+        function clickA(event) {
+            event.preventDefault();//取消默认行为
+            //删除后自动更新序号
+            num--;
+            var $tr = $(this).parent().parent();
+            $tr.nextAll().each(function () {
+                var $num = $(this).children().first();
+                $num.replaceWith('<th>' + ($num.html() - 1) + '</th>')
+
+            })
+            $tr.remove();
+        }
+    })
+
+
+
+</script>
+
+
+</html>
